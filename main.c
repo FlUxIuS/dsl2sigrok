@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 	uint16_t i;
 	for(i=0; i<total_probes; i++)
 	{
-		sprintf(channel, "probe%u=%s\n", i+1, probe_names[i]);
+		snprintf(channel, sizeof(channel), "probe%u=%s\n", i+1, probe_names[i]);
 		strcat(channels, channel);
 	}
 	
