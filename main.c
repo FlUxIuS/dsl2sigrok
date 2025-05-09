@@ -27,7 +27,7 @@ AGPLv3+ and NO WARRANTY!
 
 #define MAX_PROBES 32 //should be enough...
 
-#define MAX_LENGTH_PROBE_NAME 150 //should be enough but you can always increase this...
+#define MAX_LENGTH_PROBE_NAME 50 //should be enough but you can always increase this...
 
 #define SZ_METADATA 500 //value?
 
@@ -141,7 +141,12 @@ int main(int argc, char **argv)
 	uint16_t i;
 	for(i=0; i<total_probes; i++)
 	{
-		snprintf(channel, sizeof(channel), "probe%u=%s\n", i+1, probe_names[i]);
+		if (strlen(probe_names[i]) + 20 < sizeof(channel)) { // 20 accounts for "probeN=" and other characters
+    			sprintf(channel, "probe%u=%s\n", i+1, probe_names[i]);
+		} else {
+    			// Handle the error - maybe truncate the name
+    			snprintf(channel, sizeof(channel), "probe%u=%.*s\n", i+1, (int)(sizeof(channel) - 20), probe_names[i]);
+		}
 		strcat(channels, channel);
 	}
 	
